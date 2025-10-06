@@ -109,6 +109,20 @@ section {
 .main-header nav ul li a:hover {
     background-color: #00897b;
 }
+/* Style spécifique pour le bouton Admin */
+.main-header nav ul li a.login-btn {
+    background-color: #ffb300; /* Couleur jaune/orange */
+    color: #004d40; /* Couleur du texte vert foncé */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.main-header nav ul li a.login-btn:hover {
+    background-color: #ffa000;
+    color: #004d40;
+}
 
 /*======================================================
   2. SECTION HERO (Introduction/Image de fond)
@@ -468,4 +482,45 @@ section {
     .stats-pro {
         grid-template-columns: 1fr;
     }
+}
+
+/* --- Styles de Base (Exemple basé sur votre code) --- */
+
+/* ... (conservez vos autres styles CSS existants ici) ... */
+
+/* --- Styles pour les boutons de réaction (Nouveau) --- */
+.reactions {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-start;
+}
+.reaction-btn {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.reaction-btn:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-1px);
+}
+.reaction-btn:active {
+    background-color: #d0d0d0;
+}
+.reaction-btn span {
+    font-weight: bold;
+    margin-left: 5px;
+}
+/* Style pour le bouton après avoir réagi (optionnel) */
+.reaction-btn:disabled, .reaction-btn.reacted {
+    background-color: #004d40; /* Couleur principale */
+    color: white;
+    border-color: #004d40;
+    cursor: default;
 }

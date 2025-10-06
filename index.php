@@ -1,3 +1,10 @@
+<?php
+// Mettez ceci au tout début du fichier index.php pour gérer les sessions correctement
+session_start();
+
+// Le reste de votre code PHP (chargement des données) est déjà présent plus bas.
+// Nul besoin de le répéter ici.
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -18,6 +25,7 @@
                     <li><a href="#evenements">Événements</a></li>
                     <li><a href="#presentation">Présentation</a></li>
                     <li><a href="#contact">Contact</a></li>
+                    <li><a href="login.php" class="login-btn">Admin</a></li> 
                 </ul>
             </nav>
         </div>
@@ -51,28 +59,37 @@
         <div class="container">
             <h2>Dernières Actualités 📣</h2>
 
-            <article class="news-item urgent">
-                <h3>COMMUNICATION URGENTE : PAS DE COURS DEMAIN</h3>
-                <p class="date">Publié le 5 octobre 2024</p>
-                <p>Suite à la note officielle de la **DREN Analamanga**, les cours sont suspendus demain, **lundi 6 octobre 2025**. Le personnel est prié de se présenter. Reprise des cours mardi. Veuillez rester informés sur notre site.</p>
-                <a href="#">Télécharger la note officielle (PDF)</a>
-            </article>
+            <?php
+            // Lire les données des actualités
+            $news_data = file_get_contents('data/news.json');
+            $news = json_decode($news_data, true);
 
-            <article class="news-item">
-                <h3>Rentrée scolaire 2024/2025</h3>
-                <p class="date">Publié le 1er septembre 2024</p>
-                <p>Cher(ère)s parents, la rentrée s'est déroulée dans d'excellentes conditions. Veuillez consulter le calendrier mis à jour pour les horaires des cours.</p>
-                <a href="#">Lire la suite</a>
-            </article>
+            // Afficher seulement les 3 dernières (ou toutes, selon le besoin)
+            $news_to_display = array_slice($news, 0, 3);
 
-            <article class="news-item">
-                <h3>Travaux de rénovation du gymnase</h3>
-                <p class="date">Publié le 20 août 2024</p>
-                <p>Les travaux sont terminés et le nouveau gymnase est prêt à accueillir les élèves ! Venez le découvrir lors de la prochaine journée portes ouvertes.</p>
-                <a href="#">Lire la suite</a>
+            if (!empty($news_to_display)):
+                foreach ($news_to_display as $item):
+                    // Détermine si l'article est urgent
+                    $class = $item['urgent'] ? 'news-item urgent' : 'news-item';
+            ?>
+            <article class="<?php echo $class; ?>">
+                <h3><?php echo htmlspecialchars($item['title']); ?></h3>
+                <p class="date">Publié le <?php echo htmlspecialchars($item['date']); ?></p>
+                <p><?php echo nl2br(htmlspecialchars($item['content'])); ?></p>
+                <?php if (!empty($item['link'])): ?>
+                    <a href="<?php echo htmlspecialchars($item['link']); ?>">Lire la suite</a>
+                <?php endif; ?>
             </article>
+            <?php
+                endforeach;
+            else:
+            ?>
+            <p style="text-align: center;">Aucune actualité n'est disponible pour le moment.</p>
+            <?php
+            endif;
+            ?>
 
-            </div>
+        </div>
     </section>
 
     <section id="evenements" class="events-section">
@@ -81,33 +98,33 @@
             
             <div class="events-grid">
                 
-                <div class="event-card">
-                    <h3>Journée Portes Ouvertes</h3>
-                    <p>🗓️ **Date:** Samedi 15 octobre 2024</p>
-                    <p>🕒 **Heure:** 9h00 - 12h00</p>
-                    <p>Venez rencontrer l'équipe pédagogique et visiter nos locaux.</p>
-                </div>
+                <?php
+                // Lire les données des événements
+                $events_data = file_get_contents('data/event.json');
+                $events = json_decode($events_data, true);
 
+                if (!empty($events)):
+                    foreach ($events as $event):
+                ?>
                 <div class="event-card">
-                    <h3>Voyage d'Étude 🎓</h3>
-                    <p>🗓️ **Date:** Du 12 au 16 mai 2025</p>
-                    <p>📍 **Destination:** Cité des Sciences et de l'Industrie (Paris)</p>
-                    <p>Voyage réservé aux élèves de Terminale pour une immersion scientifique.</p>
+                    <h3><?php echo htmlspecialchars($event['title']); ?></h3>
+                    <p>🗓️ **Date:** <?php echo htmlspecialchars($event['date']); ?></p>
+                    <?php if (!empty($event['time'])): ?>
+                        <p>🕒 **Heure:** <?php echo htmlspecialchars($event['time']); ?></p>
+                    <?php endif; ?>
+                    <?php if (!empty($event['location'])): ?>
+                        <p>📍 **Lieu:** <?php echo htmlspecialchars($event['location']); ?></p>
+                    <?php endif; ?>
+                    <p><?php echo nl2br(htmlspecialchars($event['description'])); ?></p>
                 </div>
-                
-                <div class="event-card">
-                    <h3>Excursion Sportive 🏃</h3>
-                    <p>🗓️ **Date:** Mercredi 5 février 2025</p>
-                    <p>📍 **Lieu:** Parc National de l'Isalo</p>
-                    <p>Journée de randonnée et de découverte de la biodiversité locale pour les collégiens.</p>
-                </div>
-
-                <div class="event-card">
-                    <h3>Spectacle de fin d'année</h3>
-                    <p>🗓️ **Date:** Vendredi 30 juin 2025</p>
-                    <p>🕒 **Heure:** 18h00</p>
-                    <p>Théâtre de l'école. Tous les parents sont invités !</p>
-                </div>
+                <?php
+                    endforeach;
+                else:
+                ?>
+                <p style="text-align: center; width: 100%;">Aucun événement n'est programmé pour le moment.</p>
+                <?php
+                endif;
+                ?>
 
             </div>
             
