@@ -12,6 +12,8 @@ body {
     line-height: 1.6;
     color: #333;
     background-color: #f4f7f6;
+    /* Règle de sécurité finale pour éviter le défilement horizontal indésirable */
+    overflow-x: hidden; 
 }
 
 /* Utilitaires (Conteneur et Sections Générales) */
@@ -23,7 +25,6 @@ body {
 }
 
 section {
-    /* Optimisation des marges/padding pour une meilleure aération */
     padding: 60px 0; 
 }
 
@@ -113,7 +114,6 @@ section {
   2. SECTION HERO (Introduction/Image de fond)
 ========================================================*/
 .hero {
-    /* Image de fond avec calque sombre */
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
                 url('sary/ecole.jpg') no-repeat center center/cover;
     
@@ -187,7 +187,7 @@ section {
   4. SECTION ACTUALITÉS
 ========================================================*/
 .news-section {
-    background-color: #fcfcfc; /* Légèrement différent pour démarquer */
+    background-color: #fcfcfc;
     border-top: 5px solid #ffb300;
 }
 
@@ -216,7 +216,7 @@ section {
     font-weight: bold;
 }
 
-/* Style spécifique pour les articles urgents (ex: DREN Analamanga) */
+/* Style spécifique pour les articles urgents */
 .news-item.urgent {
     background-color: #fce4ec; 
     border-left-color: #e91e63;
@@ -230,32 +230,43 @@ section {
     background-color: #e0f2f1;
 }
 
-.events-section .container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+/* Utilisation de Grid pour un affichage dynamique des cartes */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 30px; 
 }
 
 .event-card {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    margin: 0 10px 20px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex-basis: 45%;
+    margin: 0; 
 }
+
+.event-card h3 {
+    color: #004d40;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+.event-card p {
+    margin-bottom: 5px;
+}
+
 
 /*======================================================
   6. SECTION PRÉSENTATION (Qui Sommes-Nous) - PROFESSIONNEL
 ========================================================*/
 .about-section {
-    background-color: white; /* Fond blanc épuré */
+    background-color: white; 
 }
 
 /* Grille pour le contenu de la présentation (texte et chiffres) */
 .presentation-grid {
     display: grid;
-    grid-template-columns: 3fr 2fr; /* Plus d'espace pour le texte (3/5) */
+    grid-template-columns: 3fr 2fr;
     gap: 60px;
     align-items: start;
 }
@@ -286,7 +297,7 @@ section {
     font-size: 1.3em;
     font-weight: bold;
     color: #333;
-    border-left: 4px solid #ffb300; /* Touche de couleur discrète */
+    border-left: 4px solid #ffb300;
     padding-left: 15px;
     margin-bottom: 30px;
 }
@@ -299,11 +310,11 @@ section {
 }
 
 .value-item {
-    background: #e0f2f1; /* Fond très clair et doux */
+    background: #e0f2f1;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    flex: 1; /* Chaque carte prend une part égale */
+    flex: 1;
 }
 
 .value-item h4 {
@@ -323,7 +334,7 @@ section {
 
 /* Bloc des Chiffres Clés (Design Contraste Professionnel) */
 .stats-card-professional {
-    background-color: #004d40; /* Couleur thème foncé */
+    background-color: #004d40;
     color: white;
     padding: 30px;
     border-radius: 8px;
@@ -334,7 +345,7 @@ section {
 .stats-card-professional > p {
     font-size: 1.1em;
     margin-bottom: 30px;
-    color: #b2dfdb; /* Couleur claire pour le texte sur fond foncé */
+    color: #b2dfdb;
 }
 
 .stats-pro {
@@ -344,14 +355,14 @@ section {
 }
 
 .stat-item-pro {
-    background: #00897b; /* Couleur plus claire pour les cartes */
+    background: #00897b;
     padding: 15px 10px;
     border-radius: 5px;
 }
 
 .stat-item-pro h3 {
     font-size: 2.5em;
-    color: #ffb300; /* Chiffres en couleur d'accentuation */
+    color: #ffb300;
     margin: 0 0 5px 0;
 }
 
@@ -359,18 +370,6 @@ section {
     font-size: 0.9em;
     color: white;
     margin: 0;
-}
-
-/* Ajustement pour la réactivité mobile */
-@media (max-width: 900px) {
-    .presentation-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .value-cards {
-        flex-direction: column; /* Empiler les cartes de valeur sur mobile */
-    }
 }
 
 
@@ -396,17 +395,64 @@ section {
 
 
 /*======================================================
-  8. MEDIA QUERIES (Réactivité pour Mobile)
+  8. MEDIA QUERIES (Réactivité pour Mobile et Tablette)
 ========================================================*/
-@media (max-width: 900px) {
-    /* Présentation (Qui Sommes-Nous) devient vertical */
+
+/* ---------- Écrans Moyens (Tablettes : max 1000px) ---------- */
+@media (max-width: 1000px) {
+    /* Présentation : Le texte et les chiffres passent sur une seule colonne */
     .presentation-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 40px;
+    }
+    
+    .description-text {
+        padding-right: 0;
+    }
+    
+    /* Les cartes de valeurs s'empilent sur les écrans plus petits */
+    .value-cards {
+        flex-direction: column; 
     }
 }
 
+/* ---------- Petits Écrans (Mobiles : max 768px) ---------- */
 @media (max-width: 768px) {
+    
+    /* Header : NAVIGATION CORRIGÉE */
+    .main-header .container {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px 0; 
+    }
+    
+    .main-header nav {
+        width: 100%;
+        overflow-x: auto; /* Permet le défilement horizontal de la navigation si elle est trop large */
+    }
+
+    .main-header nav ul {
+        flex-wrap: nowrap; /* Empêche les liens de passer à la ligne */
+        justify-content: flex-start; /* Aligne à gauche ou centre si l'espace est suffisant */
+        margin-top: 10px;
+        /* Ajout d'une petite marge pour que le défilement horizontal soit visible */
+        padding-bottom: 5px; 
+    }
+    
+    .main-header nav ul li a {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    /* Hero : Réduire la hauteur et la taille du texte */
+    .hero {
+        height: 45vh;
+    }
+    
+    .hero h2 {
+        font-size: 2em;
+    }
+
     /* Mot de la Directrice devient vertical */
     .message-content {
         flex-direction: column;
@@ -415,12 +461,11 @@ section {
     }
     
     .text-content p {
-        text-align: left; /* Ajuster l'alignement du texte du message */
+        text-align: left;
     }
     
-    /* Événements : une seule colonne sur les très petits écrans */
-    .event-card {
-        flex-basis: 100%;
-        margin: 10px 0;
+    /* Chiffres clés (Stats) : Une seule colonne sur mobile */
+    .stats-pro {
+        grid-template-columns: 1fr;
     }
 }
